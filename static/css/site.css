@@ -1,0 +1,62 @@
+/* Style */
+
+
+/*body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.bar-graph-container {
+    width: auto;
+    background-color: #fefefe;
+}
+
+.axis {
+    font: 10px Georgia, Arial, sans-serif;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #d1d1d1;
+    shape-rendering: crispEdges;
+}*/
+
+
+
+
+
+body {
+    background-color: #ECEFF1;
+}
+
+svg {
+    padding: 10px;
+    font: 12px Georgia, Arial, sans-serif;
+}
+
+g {
+    margin: 0 auto;
+}
+
+h2, p {
+    font: 14px Georgia, Arial, sans-serif;
+}
+
+
+.donut-charts-legend {
+    width: 100px;
+    border: dotted black 1px;
+}
+
+/* Style our navbar. */
+.navbar {
+    background-color: transparent;
+    border-bottom: none;
+}
+
+
+.fa, .glyphicon {
+    font-size: 50px;
+    color: #333333;
+}
