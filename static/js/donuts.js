@@ -102,7 +102,8 @@ function initializeDonuts() {
             // DONUTS
             var svg = d3.select(".donut-charts-container").selectAll(".pie")
                 .data(data)
-                .enter().append("svg")
+                .enter()
+                .append("svg")
                 .attr("class", "pie")
                 .attr("width", function(d) {
                     return (r(d.num_eng)+innerRadius+donutPadding)*2;
@@ -114,10 +115,11 @@ function initializeDonuts() {
                 .attr("transform", function(d) {
                     return "translate(" + (r(d.num_eng)+innerRadius+donutPadding) + "," + (r(d.num_eng)+innerRadius+donutPadding) + ")";});
 
-            svg.selectAll(".arc")
+            var arcs = svg.selectAll(".arc")
                 .data(function(d) { return pie(d.piePercents); })
-                .enter().append("path")
-                .attr("class", "arc")
+                .enter()
+                .append("g").attr("class", "arc")
+                .append("path")
                 .attr("d", arc)
                 .style("fill", function(d) { return color(d.data.percent_gender); })
                 .style("stroke-width", 0);
@@ -130,7 +132,7 @@ function initializeDonuts() {
                 .text(function(d) { return d.key; });
 
             // data label
-            svg.append("text")
+            arcs.append("text")
                 .style("text-anchor", function(d) {
                     return "middle";
                 })
@@ -139,8 +141,8 @@ function initializeDonuts() {
                     // debugger;
                     // var outerRadius = r(d.num_eng);
                     // d.innerRadius = innerRadius;
-                    console.log(this.centroid(d));
-                    return "translate(" + arc.centroid(d) + ")";
+                    // console.log(this.centroid(d));
+                    // return "translate(" + arc.centroid(d) + ")";
                 })
                 .style("fill", highlight)
                 .style("font-weight", "bold")
