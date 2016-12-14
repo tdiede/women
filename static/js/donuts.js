@@ -7,7 +7,7 @@ $(window).resize( function() {
     initializeDonuts;
 });
 
-which pg_config
+
 function initializeDonuts() {
 
         function plot_donuts(error,data) {
