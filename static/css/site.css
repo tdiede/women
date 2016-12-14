@@ -43,6 +43,11 @@ h2, p {
     font: 14px Georgia, Arial, sans-serif;
 }
 
+.arc {
+    cursor: pointer;
+}
+
+
 
 .donut-charts-legend {
     width: 100px;

@@ -26,7 +26,7 @@ function initializeDonuts() {
             d3.select(".donut-charts-title")
               .append("p")
               // creatively obtained.
-              .html("<p>Crowdsourced data by Tracy Chou. <a href='https://twitter.com/triketora' target='_blank'>@triketora</a></p><hr><p>Data visualization by Therese Diede. <a href='https://twitter.com/thyrese' target='_blank'>@thyrese</a></p>");
+              .html("<p>Data visualization using d3.js.</p><p>Crowdsourced data by Tracy Chou. <a href='https://twitter.com/triketora' target='_blank'>@triketora</a></p>");
 
             var donutPadding = 25;
 
@@ -71,11 +71,13 @@ function initializeDonuts() {
 
             data.forEach(function(d) {
                 var pieRadius = r(d.num_eng);
-                d.piePercents = color.domain().map(function(percent_gender) {
+                var percentFemale = d.percent_female_eng;
+                d.piePercents = color.domain().map(function(gender) {
                     return {
-                        percent_gender: percent_gender,
-                        counts: +d[percent_gender],
-                        'radius': pieRadius
+                        gender: gender,
+                        counts: +d[gender],
+                        'radius': pieRadius,
+                        'female': percentFemale
                     };
                 });
             });
@@ -115,15 +117,6 @@ function initializeDonuts() {
                 .attr("transform", function(d) {
                     return "translate(" + (r(d.num_eng)+innerRadius+donutPadding) + "," + (r(d.num_eng)+innerRadius+donutPadding) + ")";});
 
-            var arcs = svg.selectAll(".arc")
-                .data(function(d) { return pie(d.piePercents); })
-                .enter()
-                .append("g").attr("class", "arc")
-                .append("path")
-                .attr("d", arc)
-                .style("fill", function(d) { return color(d.data.percent_gender); })
-                .style("stroke-width", 0);
-
             // company label
             svg.append("text")
                 .attr("dy", function(d) {
@@ -131,25 +124,41 @@ function initializeDonuts() {
                 .style("text-anchor", "middle")
                 .text(function(d) { return d.key; });
 
+            // ARCS
+            var arcs = svg.selectAll(".arc")
+                .data(function(d) { return pie(d.piePercents); })
+                .enter()
+                .append("svg:g")
+                .attr("class", "arc");
+
+            arcs.append("svg:path")
+                .attr("d", arc)
+                .style("fill", function(d) { return color(d.data.gender); })
+                .style("stroke-width", 0);
+
             // data label
-            arcs.append("text")
-                .style("text-anchor", function(d) {
-                    return "middle";
-                })
-                .attr("transform", function(d) {
-                    console.log(d);
-                    // debugger;
-                    // var outerRadius = r(d.num_eng);
-                    // d.innerRadius = innerRadius;
-                    // console.log(this.centroid(d));
-                    // return "translate(" + arc.centroid(d) + ")";
-                })
-                .style("fill", highlight)
-                .style("font-weight", "bold")
-                .text(function(d) { return d.percent_female_eng + '%'; });
+            arcs.on("mouseover", function(d) {
+                d3.select(this)
+                    .style("opacity", 0.8)
+                    .append("svg:text")
+                    .attr("text-anchor", "middle")
+                    .attr("transform", function(d) {
+                        var c = arc.centroid(d);
+                        return "translate(" + c[0]*2.3 + "," + c[1]*1.8 + ")";
+                    })
+                    .style("fill", function(d) { return color(d.data.gender); })
+                    .style("font-weight", "bold")
+                    .text(function(d) { return d.data.counts; });
+            });
+
+            arcs.on("mouseout", function(d) {
+                d3.select(this)
+                    .style("opacity", 1.0)
+                    .select("text").remove();
+            });
         }
 
-        d3.csv("static/data/data_spreadsheet.csv", function(d) {
+        d3.csv("../static/data/data_spreadsheet.csv", function(d) {
             d['num_eng'] = +d['num_eng'];
             d['WOMEN'] = +d['num_female_eng'];
             d['OTHER'] = +(d['num_eng'] - d['num_female_eng']);
