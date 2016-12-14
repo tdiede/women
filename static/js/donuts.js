@@ -147,7 +147,7 @@ function initializeDonuts() {
                 .text(function(d) { return d.percent_female_eng + '%'; });
         }
 
-        d3.csv("../static/data/data_spreadsheet.csv", function(d) {
+        d3.csv("static/data/data_spreadsheet.csv", function(d) {
             d['num_eng'] = +d['num_eng'];
             d['WOMEN'] = +d['num_female_eng'];
             d['OTHER'] = +(d['num_eng'] - d['num_female_eng']);
